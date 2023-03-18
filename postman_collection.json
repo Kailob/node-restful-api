@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"name\": \"Example 1\",\r\n    \"price\": 1.2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

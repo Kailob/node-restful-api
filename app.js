@@ -4,12 +4,41 @@ const morgan = require('morgan');
 
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
-
-// Parses incoming requests with JSON payloads and is based on body-parser.
-app.use(express.json())
+const { urlencoded } = require('express');
 
 // Logger middleware, for development.
 app.use(morgan('dev'));
+
+// Parses incoming requests with urlencoded payloads and is based on body-parser.
+app.use(express.urlencoded({ extended: false }));
+// Parses incoming requests with JSON payloads and is based on body-parser.
+app.use(express.json());
+
+// CORS handler.
+app.use((req, res, next) => {
+    // Allow all origins
+    res.header('Access-Control-Allow-Origin', '*');
+    // Example of a restriction would be:
+    // res.header('Access-Control.Allow-Origin', 'https://my-website.com');
+    // But tools like postman will still be able to access to the API
+
+    // Define allowed header
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+
+    // Supported request method options
+    if (req.method === 'OPTIONS') {
+        req.header(
+            'Access-Control-Allow-Methods',
+            'PUT, POST, PATCH, DELETE, GET'
+        );
+        return res.status(200).json({});
+    }
+
+    next(); //To allow other routes to execute
+});
 
 // App Routes
 app.use('/products', productsRoutes);

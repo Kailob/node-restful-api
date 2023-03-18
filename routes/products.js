@@ -22,8 +22,16 @@ router.get('/', (req, res, next) => {
  * 303 response can be used to direct the user agent to retrieve cacheable resource.
  */
 router.post('/', (req, res, next) => {
+    const { name, price } = req.body;
+
+    const product = {
+        name,
+        price
+    }
+
     res.status(201).json({
-        message: 'Product Created'
+        message: 'Product Created',
+        createdProduct: product
     });
 });
 
