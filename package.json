@@ -1,0 +1,27 @@
+{
+  "name": "restful-api",
+  "version": "1.0.0",
+  "description": "RESTful API with Node.js Express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kailob/node-restful-api.git"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "Miguel Tavares",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kailob/node-restful-api/issues"
+  },
+  "homepage": "https://github.com/Kailob/node-restful-api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
