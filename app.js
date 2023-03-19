@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require('express'); //https://expressjs.com/en/api.html#expressnode 
 const app = express();
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
-const { urlencoded } = require('express');
 
 // Logger middleware, for development.
 app.use(morgan('dev'));
@@ -39,6 +39,9 @@ app.use((req, res, next) => {
 
     next(); //To allow other routes to execute
 });
+
+
+mongoose.connect(process.env.MONGO_URI);
 
 // App Routes
 app.use('/products', productsRoutes);

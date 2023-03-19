@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Kailob/node-restful-api#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "mongoose": "^7.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
