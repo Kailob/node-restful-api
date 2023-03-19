@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 8080;
 
 // GET all products
 router.get('/', (req, res, next) => {
-    //.exec turn save into a promise.
     Product
         .find()
         .select('name price _id')
@@ -51,8 +50,6 @@ router.get('/', (req, res, next) => {
  * 303 response can be used to direct the user agent to retrieve cacheable resource.
  */
 router.post('/', (req, res, next) => {
-    // const { name, price } = req.body;
-
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         ...req.body
