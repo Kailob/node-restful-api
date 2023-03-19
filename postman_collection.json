@@ -152,13 +152,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/orders/1",
+							"raw": "{{baseUrl}}/orders/64178bddfcf11208540b7355",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"orders",
-								"1"
+								"64178bddfcf11208540b7355"
 							]
 						}
 					},
@@ -171,7 +171,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"product\": \"6417650997389ddd580d2acf\"\r\n} ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -191,61 +191,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Order",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/orders/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"orders",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Full Order",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/orders/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"orders",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Partial Order",
+					"name": "Update Order",
 					"request": {
 						"method": "PATCH",
 						"header": [],
