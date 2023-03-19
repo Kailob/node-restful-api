@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 
 
 mongoose.connect(process.env.MONGO_URI);
+mongoose.Promise = global.Promise;
 
 // App Routes
 app.use('/products', productsRoutes);

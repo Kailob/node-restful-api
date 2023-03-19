@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { mongoose } = require('mongoose');
 const Product = require('../models/products');
+const PORT = process.env.PORT || 8080;
 
 /**
  * app.js defines starting point /products.
@@ -14,17 +15,25 @@ router.get('/', (req, res, next) => {
     //.exec turn save into a promise.
     Product
         .find()
+        .select('name price _id')
         .exec()
         .then(docs => {
-            console.log("From Database: ", docs);
-            if (docs.length > 0) {
-                res.status(200).json(docs);
-            } else {
-                res.status(404).json({
-                    message: "No Products Found"
-                });
+            const response = {
+                count: docs.length,
+                product: docs.map(doc => {
+                    return {
+                        // ...doc,// TODO: why not working?
+                        _id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        request: {
+                            type: 'GET/DELETE/PATCH',
+                            url: `http://localhost:${PORT}/products/${doc._id}`
+                        }
+                    }
+                })
             }
-
+            res.status(200).json(response);
         })
         .catch(err => {
             console.error(err);
@@ -42,21 +51,26 @@ router.get('/', (req, res, next) => {
  * 303 response can be used to direct the user agent to retrieve cacheable resource.
  */
 router.post('/', (req, res, next) => {
-    const { name, price } = req.body;
+    // const { name, price } = req.body;
 
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
-        name,
-        price
+        ...req.body
     });
 
     product
         .save()
         .then(doc => {
-            console.log(doc);
             res.status(201).json({
-                message: 'Product Created',
-                createdProduct: doc
+                newProduct: {
+                    _id: doc._id,
+                    name: doc.name,
+                    price: doc.price,
+                    request: {
+                        type: 'GET/DELETE/PATCH',
+                        url: `http://localhost:${PORT}/products/${doc._id}`
+                    }
+                }
             });
         })
         .catch(err => {
@@ -80,11 +94,21 @@ router.get('/:id', (req, res, next) => {
     // Let's Find the product
     Product
         .findById(id)
+        .select('name price _id')
         .exec()
         .then(doc => {
-            console.log("From Database: ", doc);
             if (doc) {
-                res.status(200).json(doc);
+                res.status(200).json(
+                    {
+                        _id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        request: {
+                            type: 'GET/DELETE/PATCH',
+                            url: `http://localhost:${PORT}/products/${doc._id}`
+                        }
+                    }
+                );
             } else {
                 res.status(404).json({
                     message: "Product Not Found"
@@ -99,47 +123,7 @@ router.get('/:id', (req, res, next) => {
         });
 });
 
-// /**
-//  * PUT handles updates by replacing the entire product identified by id.
-//  * PUT method is idempotent - can be invoked many times without different outcomes.
-//  * Should not cache its response.
-//  */
-// router.put('/:id', (req, res, next) => {
-//     const { id } = req.params;
-
-//     // Bad Request
-//     if (!mongoose.Types.ObjectId.isValid(id)) {
-//         res.status(400).send({
-//             message: `Invalid ID`
-//         })
-//     }
-
-//     const product = new Product({
-//         _id: id,
-//         ...req.body
-//     });
-
-//     product.validate()
-
-//     Product
-//         .findByIdAndUpdate(
-//             { _id: id },
-//             { $set: { ...req.body } },
-//             { new: true, runValidators: true }
-//         )
-//         .exec()
-//         .then(result => {
-//             console.log("Product put result: ", result);
-//             res.status(200).json(result);
-//         })
-//         .catch(err => {
-//             console.error(err);
-//             res.status(500).json({
-//                 error: err
-//             });
-//         });
-// });
-
+// PUT handles updates by replacing the entire product identified by id.
 // PATCH only updates the fields that we give it
 router.patch('/:id', (req, res, next) => {
     const { id } = req.params;
@@ -157,9 +141,9 @@ router.patch('/:id', (req, res, next) => {
             { $set: { ...req.body } },
             { new: true, runValidators: true }
         )
+        .select('name price _id')
         .exec()
         .then(result => {
-            console.log("Product patch result: ", result);
             res.status(200).json(result);
         })
         .catch(err => {

@@ -32,13 +32,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/products/1",
+							"raw": "{{baseUrl}}/products/6417650997389ddd580d2acf",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"1"
+								"6417650997389ddd580d2acf"
 							]
 						}
 					},
@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Example 1\",\r\n    \"price\": 1.2\r\n}",
+							"raw": "{\r\n    \"name\": \"Example 5\",\r\n    \"price\": 5,\r\n    \"lenght\": 8\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,53 +85,26 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/products/1",
+							"raw": "{{baseUrl}}/products/641759c4ba75601ea6535940",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"1"
+								"641759c4ba75601ea6535940"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Full Product",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/products/1",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"products",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Partial Product",
+					"name": "Update Product",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"price\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -139,13 +112,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/products/1",
+							"raw": "{{baseUrl}}/products/6417858c03ffc8d0aa4a6a49",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"1"
+								"6417858c03ffc8d0aa4a6a49"
 							]
 						}
 					},
