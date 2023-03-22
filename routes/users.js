@@ -3,16 +3,19 @@ const router = express.Router();
 const { mongoose } = require('mongoose');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
+const jwtoken = require('jsonwebtoken');
 const SALT = bcrypt.genSaltSync(process.env.AUTH_SALT_ROUNDS || 10);
+const expiresIn = "1h"
 
+// CREATE user
 router.post('/sign-up', (req, res, next) => {
     const { email, password } = req.body;
 
     User
-        .find({ email })
+        .findOne({ email })
         .exec()
         .then(doc => {
-            if (doc.length >= 1) {
+            if (doc) {
                 res.status(409).json({ message: "Email exists" });
             } else {
                 bcrypt.hash(
@@ -99,6 +102,66 @@ router.delete('/:id', (req, res, next) => {
         .then(result => {
             console.log("User delete result: ", result);
             res.status(200).json(result);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+});
+
+// LOGIN user
+router.post('/login', (req, res, next) => {
+    const { email, password } = req.body;
+
+    User
+        .findOne({ email })
+        .select('email password _id')
+        .exec()
+        .then(doc => {
+
+            // No user was found.
+            if (!doc) {
+                // Returning 404 could be used for brute force attacks
+                // Instead we return 401
+                return res.status(401).json({
+                    message: "Auth failed"
+                });
+            }
+
+            bcrypt.compare(
+                password,
+                doc.password,
+                (err, result) => {
+                    if (err) {
+                        return res.status(401).json({
+                            message: "Auth failed"
+                        });
+                    }
+                    if (result) {
+                        const token = jwtoken.sign(
+                            {
+                                userId: doc._id,
+                                email: doc.email,
+                            },
+                            process.env.JWT_KEY,
+                            {
+                                expiresIn: expiresIn,
+                                algorithm: 'RS256'
+                            }
+                        );
+                        return res.status(200).json({
+                            user: doc.email,
+                            token: token,
+                            expiresIn: expiresIn
+                        });
+                    }
+                    return res.status(401).json({
+                        message: "Auth failed"
+                    });
+                }
+            );
         })
         .catch(err => {
             console.error(err);
