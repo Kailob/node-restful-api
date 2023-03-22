@@ -3,7 +3,7 @@ const router = express.Router();
 const { mongoose } = require('mongoose');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
-const jwtoken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const SALT = bcrypt.genSaltSync(process.env.AUTH_SALT_ROUNDS || 10);
 const expiresIn = "1h"
 
@@ -140,7 +140,7 @@ router.post('/login', (req, res, next) => {
                         });
                     }
                     if (result) {
-                        const token = jwtoken.sign(
+                        const token = jwt.sign(
                             {
                                 userId: doc._id,
                                 email: doc.email,
@@ -148,7 +148,7 @@ router.post('/login', (req, res, next) => {
                             process.env.JWT_KEY,
                             {
                                 expiresIn: expiresIn,
-                                algorithm: 'RS256'
+                                // algorithm: 'RS256'
                             }
                         );
                         return res.status(200).json({

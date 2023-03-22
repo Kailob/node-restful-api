@@ -48,7 +48,13 @@
 					"name": "Create",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -85,7 +91,13 @@
 					"name": "Delete",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -112,7 +124,13 @@
 					"name": "Update",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"price\": 4\r\n}",
@@ -144,7 +162,13 @@
 					"name": "Get All",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{baseUrl}}/orders",
 							"host": [
@@ -161,7 +185,13 @@
 					"name": "Get",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{baseUrl}}/orders/64178bddfcf11208540b7355",
 							"host": [
@@ -179,7 +209,13 @@
 					"name": "Create",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"product\": \"6417650997389ddd580d2acf\"\r\n} ",
@@ -205,7 +241,13 @@
 					"name": "Update",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{BearerToken}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -240,7 +282,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user@email.com\",\r\n    \"password\": \"user@email.com\"\r\n} ",
+							"raw": "{\r\n    \"email\": \"user3@email.com\",\r\n    \"password\": \"user3@email.com\"\r\n} ",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -255,6 +297,33 @@
 							"path": [
 								"users",
 								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user3@email.com\",\r\n    \"password\": \"user3@email.com\"\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
 							]
 						}
 					},
@@ -331,6 +400,11 @@
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "BearerToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDFiNTQyNTA4ZjhhMjVhNjM2NTFkNzMiLCJlbWFpbCI6InVzZXIzQGVtYWlsLmNvbSIsImlhdCI6MTY3OTUyNDIzMywiZXhwIjoxNjc5NTI3ODMzfQ.hKNxyg8myOXulcaRMLCAtRs20RtDkwecLVbB1osUpkc",
 			"type": "string"
 		}
 	]
