@@ -1,5 +1,6 @@
 {
     "env": {
+        "AUTH_SALT_ROUNDS": 10,
         "MONGO_URI": "YOUR_MONGO_DB_URI"
     }
 }

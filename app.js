@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
+const usersRoutes = require('./routes/users');
 
 // Logger middleware, for development.
 app.use(morgan('dev'));
@@ -52,6 +53,7 @@ mongoose.Promise = global.Promise;
 // App Routes
 app.use('/products', productsRoutes);
 app.use('/orders', ordersRoutes);
+app.use('/users', usersRoutes);
 
 // Request didn't match previous routes
 app.use((req, res, next) => {

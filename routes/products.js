@@ -85,7 +85,6 @@ router.post('/', upload.single('image'), (req, res, next) => {
     product
         .save()
         .then(doc => {
-            console.log(doc)
             res.status(201).json({
                 newProduct: {
                     _id: doc._id,

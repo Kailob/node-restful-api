@@ -27,7 +27,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Product",
+					"name": "Get",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -45,18 +45,29 @@
 					"response": []
 				},
 				{
-					"name": "Create Product",
+					"name": "Create",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Example 5\",\r\n    \"price\": 5,\r\n    \"lenght\": 8\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Book of cenas",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "12.99",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/bfm/qa_material/220x60.png"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/products",
@@ -71,7 +82,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Product",
+					"name": "Delete",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -85,20 +96,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/products/641759c4ba75601ea6535940",
+							"raw": "{{baseUrl}}/products/641b3f4e1ad6211bf5cb6734",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"641759c4ba75601ea6535940"
+								"641b3f4e1ad6211bf5cb6734"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Product",
+					"name": "Update",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -147,7 +158,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Order",
+					"name": "Get",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -165,7 +176,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Order",
+					"name": "Create",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -191,7 +202,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Order",
+					"name": "Update",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -212,6 +223,82 @@
 							"path": [
 								"order",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Sign-Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@email.com\",\r\n    \"password\": \"user@email.com\"\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/sign-up",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/641b4fff1348e69859c02b5a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"641b4fff1348e69859c02b5a"
 							]
 						}
 					},
