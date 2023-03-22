@@ -9,6 +9,10 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: true,
         min: 1
-    }
+    },
+    image: {
+        type: Object,
+        required: false
+    },
 });
 module.exports = mongoose.model('Product', productSchema);

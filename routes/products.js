@@ -3,18 +3,43 @@ const router = express.Router();
 const { mongoose } = require('mongoose');
 const Product = require('../models/products');
 const PORT = process.env.PORT || 8080;
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
 
-/**
- * app.js defines starting point /products.
- * Here we only handle what comes after /products.
- */
+        callback(null, './uploads/');
+    },
+    filename: function (req, file, callback) {
+        callback(null, new Date().toISOString() + file.originalname);
+    }
+});
+const uploadFilter = (req, file, callback) => {
+    const extension = file.originalname.split('.').pop();
+    const mimetyp = file.mimetype;
+    if (
+        (extension === 'jpg' && mimetyp === 'image/jpg') ||
+        (extension === 'jpeg' && mimetyp === 'image/jpeg') ||
+        (extension === 'png' && mimetyp === 'image/png')) {
+        callback(null, true); // Accept a file
+    }
+    else {
+        callback(new Error('Invalid file type'), false); // Reject a file
+    }
+};
 
+const upload = multer({
+    storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: uploadFilter
+});
 
 // GET all products
 router.get('/', (req, res, next) => {
     Product
         .find()
-        .select('name price _id')
+        .select('name price image _id')
         .exec()
         .then(docs => {
             const response = {
@@ -25,8 +50,10 @@ router.get('/', (req, res, next) => {
                         _id: doc._id,
                         name: doc.name,
                         price: doc.price,
+                        image: doc.image ? doc.image.path : '',
                         request: {
                             type: 'GET/DELETE/PATCH',
+                            // TODO: change url to .env variable
                             url: `http://localhost:${PORT}/products/${doc._id}`
                         }
                     }
@@ -49,15 +76,16 @@ router.get('/', (req, res, next) => {
  *  unless the response includes appropriate Cache-Control or Expires header fields.
  * 303 response can be used to direct the user agent to retrieve cacheable resource.
  */
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('image'), (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
-        ...req.body
+        ...req.body,
+        image: req.file
     });
-
     product
         .save()
         .then(doc => {
+            console.log(doc)
             res.status(201).json({
                 newProduct: {
                     _id: doc._id,

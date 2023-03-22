@@ -9,6 +9,11 @@ const ordersRoutes = require('./routes/orders');
 // Logger middleware, for development.
 app.use(morgan('dev'));
 
+// Middleware making static folders public.
+// All requests done to uploads/, will be permitted
+// A second approach would be for us to create a route to handle these requests manually
+app.use('/uploads', express.static('uploads'));
+
 // Parses incoming requests with urlencoded payloads and is based on body-parser.
 app.use(express.urlencoded({ extended: false }));
 // Parses incoming requests with JSON payloads and is based on body-parser.
