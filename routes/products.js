@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { mongoose } = require('mongoose');
 const Product = require('../models/products');
-const PORT = process.env.PORT || 8080;
+const API_PORT = process.env.API_PORT || 8080;
 const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
 
@@ -57,7 +57,7 @@ router.get('/', (req, res, next) => {
                         request: {
                             type: 'GET/DELETE/PATCH',
                             // TODO: change url to .env variable
-                            url: `http://localhost:${PORT}/products/${doc._id}`
+                            url: `http://localhost:${API_PORT}/products/${doc._id}`
                         }
                     }
                 })
@@ -96,7 +96,7 @@ router.get('/:id', (req, res, next) => {
                         price: doc.price,
                         request: {
                             type: 'GET/DELETE/PATCH',
-                            url: `http://localhost:${PORT}/products/${doc._id}`
+                            url: `http://localhost:${API_PORT}/products/${doc._id}`
                         }
                     }
                 );
@@ -141,7 +141,7 @@ router.post(
                         price: doc.price,
                         request: {
                             type: 'GET/DELETE/PATCH',
-                            url: `http://localhost:${PORT}/products/${doc._id}`
+                            url: `http://localhost:${API_PORT}/products/${doc._id}`
                         }
                     }
                 });

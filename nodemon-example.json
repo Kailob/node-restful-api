@@ -1,7 +1,0 @@
-{
-    "env": {
-        "AUTH_SALT_ROUNDS": 10,
-        "JWT_KEY": "YOUR_JWT_KEY",
-        "MONGO_URI": "YOUR_MONGO_DB_URI"
-    }
-}

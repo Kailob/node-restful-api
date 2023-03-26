@@ -1,8 +1,9 @@
-const express = require('express'); //https://expressjs.com/en/api.html#expressnode 
+require("dotenv").config();
+require("./config/database").connect();
+
+const express = require('express'); //https://expressjs.com/en/api.html#expressnode
 const app = express();
 const morgan = require('morgan');
-const mongoose = require('mongoose');
-
 const productsRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
 const usersRoutes = require('./routes/users');
@@ -45,10 +46,6 @@ app.use((req, res, next) => {
 
     next(); //To allow other routes to execute
 });
-
-
-mongoose.connect(process.env.MONGO_URI);
-mongoose.Promise = global.Promise;
 
 // App Routes
 app.use('/products', productsRoutes);

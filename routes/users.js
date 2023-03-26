@@ -4,12 +4,17 @@ const { mongoose } = require('mongoose');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const SALT = bcrypt.genSaltSync(process.env.AUTH_SALT_ROUNDS || 10);
+const SALT = bcrypt.genSaltSync(parseInt(process.env.AUTH_SALT_ROUNDS) || 10);
 const expiresIn = "1h"
 
 // CREATE user
-router.post('/sign-up', (req, res, next) => {
-    const { email, password } = req.body;
+router.post('/register', (req, res, next) => {
+    const { first_name, last_name, email, password } = req.body;
+
+    // Validate user input
+    if (!(email && password && first_name && last_name)) {
+        res.status(400).send("All input is required");
+    }
 
     User
         .findOne({ email })
@@ -29,6 +34,8 @@ router.post('/sign-up', (req, res, next) => {
                         } else {
                             const user = new User({
                                 _id: new mongoose.Types.ObjectId(),
+                                first_name,
+                                last_name,
                                 email,
                                 password: hash
                             });

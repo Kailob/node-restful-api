@@ -3,7 +3,7 @@ const router = express.Router();
 const { mongoose } = require('mongoose');
 const Order = require('../models/orders');
 const Product = require('../models/products');
-const PORT = process.env.PORT || 8080;
+const API_PORT = process.env.API_PORT || 8080;
 const checkAuth = require('../middleware/check-auth');
 
 // Gets ALL orders
@@ -25,7 +25,7 @@ router.get(
                             quantity: doc.quantity,
                             request: {
                                 type: 'GET',
-                                url: `http://localhost:${PORT}/products/${doc._id}`
+                                url: `http://localhost:${API_PORT}/products/${doc._id}`
                             }
                         }
                     })

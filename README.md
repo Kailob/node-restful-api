@@ -9,3 +9,4 @@ RESTful API with Node.js Express
     * Copy nodemon-example.json and rename it nodemon.json. Edit by adding a valid MONGO_URI
 * **CLI Tasks**
     * Start Server: ```npm start```
+    * Development Env.: ```npm run dev```
