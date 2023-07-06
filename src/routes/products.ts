@@ -1,12 +1,11 @@
-const express = require('express');
+import express, { Request, Response, NextFunction } from "express";
+import multer, { FileFilterCallback } from 'multer';
+import mongoose from 'mongoose';
+import ProductModel from '../models/products';
+import checkAuth from '../auth/check-auth';
+import { port } from '../config/env';
+
 const router = express.Router();
-const { mongoose } = require('mongoose');
-const Product = require('../models/products');
-const API_PORT = process.env.API_PORT || 8080;
-const multer = require('multer');
-const checkAuth = require('../middleware/check-auth');
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
 
@@ -16,7 +15,8 @@ const storage = multer.diskStorage({
         callback(null, new Date().toISOString() + file.originalname);
     }
 });
-const uploadFilter = (req, file, callback) => {
+
+const uploadFilter = (req: Request, file: Express.Multer.File, callback: multer.FileFilterCallback) => {
     const extension = file.originalname.split('.').pop();
     const mimetyp = file.mimetype;
     if (
@@ -26,7 +26,8 @@ const uploadFilter = (req, file, callback) => {
         callback(null, true); // Accept a file
     }
     else {
-        callback(new Error('Invalid file type'), false); // Reject a file
+        // const err = new Error('Invalid file type');
+        callback(null, false); // Reject a file
     }
 };
 
@@ -39,41 +40,44 @@ const upload = multer({
 });
 
 // GET all products
-router.get('/', (req, res, next) => {
-    Product
-        .find()
-        .select('name price image _id')
-        .exec()
-        .then(docs => {
-            const response = {
-                count: docs.length,
-                product: docs.map(doc => {
-                    return {
-                        // ...doc,// TODO: why not working?
-                        _id: doc._id,
-                        name: doc.name,
-                        price: doc.price,
-                        image: doc.image ? doc.image.path : '',
-                        request: {
-                            type: 'GET/DELETE/PATCH',
-                            // TODO: change url to .env variable
-                            url: `http://localhost:${API_PORT}/products/${doc._id}`
+router.get(
+    '/',
+    (req: Request, res: Response) => {
+        ProductModel
+            .find()
+            .select('name price image _id')
+            .exec()
+            .then(docs => {
+                const response = {
+                    count: docs.length,
+                    product: docs.map(doc => {
+                        return {
+                            // ...doc,// TODO: why not working?
+                            _id: doc._id,
+                            name: doc.name,
+                            price: doc.price,
+                            // TODO: Fix image path
+                            // image: doc.image ? doc.image.path : '',
+                            request: {
+                                type: 'GET/DELETE/PATCH',
+                                // TODO: change url to .env variable
+                                url: `http://localhost:${port}/products/${doc._id}`
+                            }
                         }
-                    }
-                })
-            }
-            res.status(200).json(response);
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({
-                error: err
+                    })
+                }
+                res.status(200).json(response);
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).json({
+                    error: err
+                });
             });
-        });
-});
+    });
 
 // GET the product identified by id
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
     // Bad Request
@@ -83,7 +87,7 @@ router.get('/:id', (req, res, next) => {
         })
     }
     // Let's Find the product
-    Product
+    ProductModel
         .findById(id)
         .select('name price _id')
         .exec()
@@ -96,7 +100,7 @@ router.get('/:id', (req, res, next) => {
                         price: doc.price,
                         request: {
                             type: 'GET/DELETE/PATCH',
-                            url: `http://localhost:${API_PORT}/products/${doc._id}`
+                            url: `http://localhost:${port}/products/${doc._id}`
                         }
                     }
                 );
@@ -125,8 +129,8 @@ router.post(
     '/',
     checkAuth,
     upload.single('image'),
-    (req, res, next) => {
-        const product = new Product({
+    (req: Request, res: Response, next: NextFunction) => {
+        const product = new ProductModel({
             _id: new mongoose.Types.ObjectId(),
             ...req.body,
             image: req.file
@@ -141,7 +145,7 @@ router.post(
                         price: doc.price,
                         request: {
                             type: 'GET/DELETE/PATCH',
-                            url: `http://localhost:${API_PORT}/products/${doc._id}`
+                            url: `http://localhost:${port}/products/${doc._id}`
                         }
                     }
                 });
@@ -159,7 +163,7 @@ router.post(
 router.patch(
     '/:id',
     checkAuth,
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         // Bad Request
@@ -169,7 +173,7 @@ router.patch(
             })
         }
 
-        Product
+        ProductModel
             .findByIdAndUpdate(
                 { _id: id },
                 { $set: { ...req.body } },
@@ -192,7 +196,7 @@ router.patch(
 router.delete(
     '/:id',
     checkAuth,
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         // Bad Request
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -200,7 +204,7 @@ router.delete(
                 message: `Invalid ID`
             })
         }
-        Product
+        ProductModel
             .deleteOne({
                 _id: id
             })

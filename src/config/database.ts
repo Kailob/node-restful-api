@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { db } from "./env.js";
 
-module.exports.connect = () => {
-    mongoose
+const connectDB = async () => {
+    await mongoose
         .connect(
-            process.env.MONGO_URI,
+            db.URI,
             {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
+                // useNewUrlParser: true,
+                // useUnifiedTopology: true,
                 // useCreateIndex: true,
                 // useFindAndModify: false,
             }
@@ -20,3 +21,5 @@ module.exports.connect = () => {
             process.exit(1);
         });
 };
+
+export default connectDB;

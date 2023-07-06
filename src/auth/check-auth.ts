@@ -1,6 +1,15 @@
-const jwt = require('jsonwebtoken');
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from 'express';
+import { jwt as config } from "../config/env";
 
-module.exports = (req, res, next) => {
+const SECRET_KEY: jwt.Secret = config.KEY;
+
+export interface CustomRequest extends Request {
+    token: string | jwt.JwtPayload;
+    userData: string | jwt.JwtPayload;
+}
+
+const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     // const token = req.body.token || req.query.token || req.headers["x-access-token"] || req.headers["authorization"];
     const bearerHeader = req.headers["authorization"];
 
@@ -12,11 +21,10 @@ module.exports = (req, res, next) => {
         try {
             const bearer = bearerHeader.split(' ');
             const bearerToken = bearer[1];
-            const decoded = jwt.verify(bearerToken, process.env.JWT_KEY);
-            // console.log(bearerToken, decoded)
+            const decoded = jwt.verify(bearerToken, SECRET_KEY);
 
-            req.token = bearerToken;
-            req.userData = decoded;
+            (req as CustomRequest).token = bearerToken;
+            (req as CustomRequest).userData = decoded;
 
             return next();
         } catch (err) {
@@ -26,3 +34,5 @@ module.exports = (req, res, next) => {
         }
     }
 };
+
+export default checkAuth;

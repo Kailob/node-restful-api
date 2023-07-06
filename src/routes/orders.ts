@@ -1,16 +1,20 @@
-const express = require('express');
+import express, { Request, Response, NextFunction } from "express";
+import mongoose from 'mongoose';
+import OrderModel from '../models/orders';
+import ProductModel from '../models/products';
+// const checkAuth = require('../middleware/check-auth');
+import checkAuth from '../auth/check-auth';
+import { port } from '../config/env';
+
+
 const router = express.Router();
-const { mongoose } = require('mongoose');
-const Order = require('../models/orders');
-const Product = require('../models/products');
-const API_PORT = process.env.API_PORT || 8080;
-const checkAuth = require('../middleware/check-auth');
 
 // Gets ALL orders
 router.get(
     '/',
-    checkAuth, (req, res, next) => {
-        Order
+    checkAuth,
+    (req: Request, res: Response, next: NextFunction) => {
+        OrderModel
             .find()
             .select('product quantity _id')
             .populate('product', 'name _id')
@@ -25,7 +29,7 @@ router.get(
                             quantity: doc.quantity,
                             request: {
                                 type: 'GET',
-                                url: `http://localhost:${API_PORT}/products/${doc._id}`
+                                url: `http://localhost:${port}/products/${doc._id}`
                             }
                         }
                     })
@@ -44,13 +48,13 @@ router.get(
 router.post(
     '/',
     checkAuth,
-    (req, res, next) => {
-        const order = new Order({
+    (req: Request, res: Response, next: NextFunction) => {
+        const order = new OrderModel({
             _id: new mongoose.Types.ObjectId(),
             ...req.body
         });
 
-        Product
+        ProductModel
             .findById(order.product)
             .then(doc => {
                 if (doc) {
@@ -76,7 +80,7 @@ router.post(
 router.get(
     '/:id',
     checkAuth,
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
 
         // Bad Request
@@ -86,7 +90,7 @@ router.get(
             })
         }
         // Let's Find the product
-        Order
+        OrderModel
             .findById(id)
             .select('product quantity _id')
             .populate('product', 'name _id')
@@ -113,7 +117,7 @@ router.get(
 router.patch(
     '/:id',
     checkAuth,
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         res.status(200).send({
             message: `Handling PATCH (Update) requests to /orders/${id}`
